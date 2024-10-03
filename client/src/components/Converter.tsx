@@ -5,6 +5,7 @@ import {
     CardHeader,
     CardTitle,
   } from "@/components/ui/card"
+import CardRow from "./CardRow"
   
 
 const Converter = () => {
@@ -15,7 +16,8 @@ const Converter = () => {
                 <CardDescription>Card Description</CardDescription>
             </CardHeader>
             <CardContent>
-                <p>Card Content</p>
+                <CardRow/>
+                <CardRow/>
             </CardContent>
         </Card>
     )
