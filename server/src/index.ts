@@ -16,10 +16,10 @@ app.get('/names', (c) => {
   return c.redirect('/data/names.json')
 })
 
-const PORT = 8088
+const port = 8088
 
 const server = Bun.serve({
-  port: PORT,
+  port,
   fetch: app.fetch
 })
 
