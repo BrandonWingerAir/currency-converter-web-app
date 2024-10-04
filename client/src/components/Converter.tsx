@@ -6,11 +6,11 @@ import {
     CardTitle,
   } from "@/components/ui/card"
 import CardRow from "./CardRow"
+import Loading from "./Loading"
+import Error from "./Error"
 import useSWR from "swr"
   
 const BASE_URL = import.meta.env.VITE_BE_URL
-
-console.log(BASE_URL, 'BASE_URL');
 
 const Converter = () => {
     const {
@@ -29,7 +29,13 @@ const Converter = () => {
         (url) => fetch(url).then((res) => res.json())
     )
 
-    console.log(currenciesData, namesData, 'DATA');
+    if (isCurrenciesLoading || isNamesLoading) {
+        return <Loading/>
+    }
+
+    if (currenciesError || namesError) {
+        return <Error message="Error! Failed to fetch data!"/>
+    }
     
     return (
         <Card className="max-width-300px">
