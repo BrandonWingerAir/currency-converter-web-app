@@ -1,5 +1,5 @@
 {
-    "success": true, "timestamp": 1674038943, "Abase": "CAD", "date": "2023-01-18", "rates": {
+    "success": true, "timestamp": 1674038943, "abbreviation": "CAD", "date": "2023-01-18", "rates": {
     "AED": 3.986738,
     "AFN": 98.049483,
     "ALL": 117.015434,

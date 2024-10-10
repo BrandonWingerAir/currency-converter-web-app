@@ -6,3 +6,10 @@ bun --hot run index.ts
 ```
 
 View currency file: http://localhost:8088/data/currencies.json
+
+To start client:
+```sh
+cd client
+bun install
+bun run dev
+```
