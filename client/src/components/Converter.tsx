@@ -9,8 +9,9 @@ import CardRow from "./CardRow"
 import Loading from "./Loading"
 import Error from "./Error"
 import useSWR from "swr"
-import { useState } from "react"
-import modifyNames from "@/utils/modifyNames"
+import { ChangeEvent, useEffect, useState } from "react"
+import modifyNames from "@/lib/utils/modifyNames"
+import calculateExchangeRate from "@/lib/utils/calculateRate"
   
 const BASE_URL = import.meta.env.VITE_BE_URL
 
@@ -26,7 +27,10 @@ const Converter = () => {
 
     if (isForward) {
         sourceAmount = amount;
-        targetAmount = (Number(amount) / exchangeRate).toFixed(2)
+        targetAmount = (Number(amount) * exchangeRate).toFixed(2)
+    } else {
+        targetAmount = amount;
+        sourceAmount = (Number(amount) / exchangeRate).toFixed(2)
     }
 
     const {
@@ -36,7 +40,7 @@ const Converter = () => {
     } = useSWR(`${BASE_URL}/names`,
         (url) => fetch(url).then(async (res) => {
             const data = await res.json()
-            console.log(modifyNames(data), 'modifyNames(data');
+            return modifyNames(data)
         })
     )
 
@@ -47,6 +51,25 @@ const Converter = () => {
     } = useSWR(`${BASE_URL}/currencies`,
         (url) => fetch(url).then((res) => res.json())
     )
+
+    useEffect(() => {
+        if (namesData && currenciesData) {         
+            !sourceCurrency && setSourceCurrency(namesData?.[26].abbreviation)
+            !targetCurrency && setTargetCurrency(namesData?.[149].abbreviation)
+
+            setExchangeRate(calculateExchangeRate(sourceCurrency || namesData?.[0].abbreviation, targetCurrency || namesData?.[1].abbreviation, currenciesData))
+        }
+    }, [namesData, currenciesData, sourceCurrency, targetCurrency]);
+
+    const handleChangeSourceAmount = (e: ChangeEvent<HTMLInputElement>) => {
+        setIsForward(true)
+        setAmount(e.target.value)
+    }
+
+    const handleChangeTargetAmount = (e: ChangeEvent<HTMLInputElement>) => {
+        setIsForward(false)
+        setAmount(e.target.value)
+    }
 
     if (isCurrenciesLoading || isNamesLoading) {
         return <Loading/>
@@ -63,8 +86,20 @@ const Converter = () => {
                 <CardDescription>Card Description</CardDescription>
             </CardHeader>
             <CardContent>
-                <CardRow/>
-                <CardRow/>
+                <CardRow
+                    amount={sourceAmount}
+                    handleChangeAmount={handleChangeSourceAmount}
+                    selectedCurrency={sourceCurrency}
+                    handleChangeCurrency={(value: string) => setSourceCurrency(value)}
+                    currencyNames={namesData}
+                />
+                <CardRow
+                    amount={targetAmount}
+                    handleChangeAmount={handleChangeTargetAmount}
+                    selectedCurrency={targetCurrency}
+                    handleChangeCurrency={(value: string) => setTargetCurrency(value)}
+                    currencyNames={namesData}
+                />
             </CardContent>
         </Card>
     )

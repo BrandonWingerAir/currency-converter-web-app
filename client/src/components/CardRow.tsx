@@ -2,17 +2,30 @@ import { useForm } from "react-hook-form"
 import { z } from 'zod'
 import { zodResolver } from "@hookform/resolvers/zod"
 
-import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"  
+import { ChangeEvent } from "react"
+import { currencyNameType } from "types"
 
 const formSchema = z.object({
     amount: z.number().positive().multipleOf(0.01),
     currency: z.string()
 })
 
-const CardRow = () => {
+const CardRow = ({
+    amount,
+    handleChangeAmount,
+    selectedCurrency,
+    handleChangeCurrency,
+    currencyNames
+}: {
+    amount: string | undefined
+    handleChangeAmount: (e: ChangeEvent<HTMLInputElement>) => void
+    selectedCurrency: string | undefined
+    handleChangeCurrency: (value: string) => void
+    currencyNames: currencyNameType[] | undefined
+}) => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -30,11 +43,18 @@ const CardRow = () => {
                         name="amount"
                         render={({ field }) => (
                             <FormItem>
-                            <FormLabel>Username</FormLabel>
-                            <FormControl>
-                                <Input placeholder="0" type="number" pattern="[0-9]*" {...field} />
-                            </FormControl>
-                            <FormMessage />
+                                <FormLabel>Username</FormLabel>
+                                <FormControl>
+                                    <Input 
+                                        {...field}
+                                        placeholder="0" 
+                                        type="number" 
+                                        pattern="[0-9]*" 
+                                        value={amount}
+                                        onChange={handleChangeAmount}
+                                    />
+                                </FormControl>
+                                <FormMessage />
                             </FormItem>
                         )}
                     />
@@ -46,20 +66,28 @@ const CardRow = () => {
                         name="currency"
                         render={({ field }) => (
                             <FormItem>
-                            <FormLabel>Username</FormLabel>
-                            <FormControl>
-                                <Select {...field}>
-                                    <SelectTrigger className="w-[180px]">
-                                        <SelectValue placeholder="Theme" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="light">Light</SelectItem>
-                                        <SelectItem value="dark">Dark</SelectItem>
-                                        <SelectItem value="system">System</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </FormControl>
-                            <FormMessage />
+                                <FormLabel>Username</FormLabel>
+                                <FormControl>
+                                    <Select 
+                                        {...field}
+                                        value={selectedCurrency}
+                                        onValueChange={handleChangeCurrency}
+                                    >
+                                        <SelectTrigger className="w-[180px]">
+                                            <SelectValue placeholder="Currency Name" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {
+                                                currencyNames?.map((item) => (
+                                                    <SelectItem key={item.abbreviation} value={item.abbreviation}>
+                                                        {item.name}
+                                                    </SelectItem>
+                                                ))
+                                            }
+                                        </SelectContent>
+                                    </Select>
+                                </FormControl>
+                                <FormMessage />
                             </FormItem>
                         )}
                     />
