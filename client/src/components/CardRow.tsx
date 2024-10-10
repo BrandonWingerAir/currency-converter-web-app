@@ -43,7 +43,7 @@ const CardRow = ({
                         name="amount"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Username</FormLabel>
+                                <FormLabel>Amount</FormLabel>
                                 <FormControl>
                                     <Input 
                                         {...field}
@@ -66,7 +66,7 @@ const CardRow = ({
                         name="currency"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Username</FormLabel>
+                                <FormLabel>Currency</FormLabel>
                                 <FormControl>
                                     <Select 
                                         {...field}

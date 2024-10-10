@@ -82,8 +82,8 @@ const Converter = () => {
     return (
         <Card className="max-width-300px">
             <CardHeader className="border-b-2 p-2 m-2">
-                <CardTitle>Card Title</CardTitle>
-                <CardDescription>Card Description</CardDescription>
+                <CardTitle>{sourceAmount} {sourceCurrency}</CardTitle>
+                <CardDescription>{targetAmount} {targetCurrency}</CardDescription>
             </CardHeader>
             <CardContent>
                 <CardRow

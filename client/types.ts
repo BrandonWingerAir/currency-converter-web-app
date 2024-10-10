@@ -1,7 +1,7 @@
 export interface ratesDataType {
     success: boolean
     timestamp: number
-    Abase: string
+    abbreviation: string
     date: string
     rates: {[key: string]: number}
 }

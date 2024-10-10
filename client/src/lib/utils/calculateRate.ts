@@ -5,7 +5,7 @@ const calculateExchangeRate = (
     targetCurrency: string = '',
     exchangeRateData: ratesDataType
 ) => {
-    const baseCurrency = exchangeRateData.Abase
+    const baseCurrency = exchangeRateData.abbreviation
     const baseCurrencyRate = exchangeRateData.rates[baseCurrency]
 
     const exchangeRate = (exchangeRateData.rates[targetCurrency] / exchangeRateData.rates[sourceCurrency]) * baseCurrencyRate
